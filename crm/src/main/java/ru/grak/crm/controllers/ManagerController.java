@@ -1,9 +1,11 @@
 package ru.grak.crm.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.grak.crm.dto.AbonentDto;
+import ru.grak.crm.dto.ChangeTariffDto;
 import ru.grak.crm.entity.Client;
 import ru.grak.crm.service.ManagerService;
 
@@ -16,12 +18,12 @@ public class ManagerController {
     private final ManagerService managerService;
 
     @PatchMapping("/change-tariff")
-    public void changeTariff(@RequestBody String msisdn, @RequestBody String typeTariff) {
-        managerService.changeTariff(msisdn, typeTariff);
+    public Client changeTariff(@Valid @RequestBody ChangeTariffDto changeTariffDto) {
+        return managerService.changeTariff(changeTariffDto);
     }
 
-    @PostMapping("/create")
-    public Client createAbonent(@RequestBody AbonentDto abonentDto) {
+    @PostMapping("/save")
+    public Client createAbonent(@Valid @RequestBody AbonentDto abonentDto) {
         return managerService.createAbonent(abonentDto);
     }
 

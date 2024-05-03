@@ -1,5 +1,8 @@
 package ru.grak.crm.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,15 +18,20 @@ import java.math.BigDecimal;
 @Builder
 public class AbonentDto {
 
-    private String phoneNumber;
-    private String tariff;
-    private BigDecimal balance = BigDecimal.valueOf(100);
+    @Pattern(regexp = "^\\d{11}$")
+    private String msisdn;
+
+    @NotBlank
+    private String tariffId;
+
+    @Positive
+    private BigDecimal money = BigDecimal.valueOf(100);
 
     public Client toEntity() {
         return Client.builder()
-                .phoneNumber(this.getPhoneNumber())
-                .tariff(TypeTariff.fromNumericValueOfType(this.getTariff()))
-                .balance(this.getBalance())
+                .phoneNumber(this.getMsisdn())
+                .tariff(TypeTariff.fromNumericValueOfType(this.getTariffId()))
+                .balance(this.getMoney())
                 .build();
     }
 }
