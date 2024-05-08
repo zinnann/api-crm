@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.grak.crm.common.LoginRequest;
 
-
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,6 +20,7 @@ public class LoginOnServer {
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = BASE_URL;
+
 
         response = given()
                 .contentType(ContentType.JSON)
@@ -36,11 +36,7 @@ public class LoginOnServer {
 
     @Test
     @DisplayName("Авторизация админа")
-    // TODO: make a real test!
     public void testAdminLogin() {
-        String adminLogin = "admin";
-        String adminPassword = "admin";
-
         System.out.println("HTTP код: " + response.getStatusCode());
         System.out.println("Тело ответа:");
         System.out.println(response.getBody().asString());
@@ -48,11 +44,20 @@ public class LoginOnServer {
 
     @Test
     @DisplayName("Авторизация пользователя")
-    // TODO: make a real test!
     public void testUserLogin() {
+        Response userResponse = given()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest("79211331626", "79211331626"))
+                .when()
+                .post("/api/auth/login");
 
+        assertEquals(200, userResponse.getStatusCode(), "Failed to authenticate user");
+
+        String userToken = userResponse.then().extract().path("token");
+        assert userToken != null && !userToken.isEmpty();
+
+        System.out.println("HTTP код: " + userResponse.getStatusCode());
+        System.out.println("Тело ответа:");
+        System.out.println(userResponse.getBody().asString());
     }
 }
-
-
-
