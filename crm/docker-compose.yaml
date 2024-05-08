@@ -1,0 +1,29 @@
+services:
+  web:
+    image: "docker-spring-postgres:latest"
+    container_name: crm
+    build:
+      context: .
+    ports:
+      - "8083:8083"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/brt
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JBA_HIBERNATE_DDL_AUTO=update
+
+  db:
+    image: "postgres:13.1-alpine"
+    container_name: db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data: 

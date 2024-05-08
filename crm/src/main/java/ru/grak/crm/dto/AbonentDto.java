@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Builder
 public class AbonentDto {
 
-    @Pattern(regexp = "^\\d{11}$")
+    @Pattern(regexp = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")
     private String msisdn;
 
     @NotBlank
